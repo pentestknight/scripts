@@ -37,7 +37,7 @@ fi
 echo
 echo
 PS3='Select the scan type: '
-options=("Regular Scan" "Quick Scan" "Intense Scan" "All TCP ports" "Slow & Comprehensive scan" "Top ports" "Specific Ports" "Quit")
+options=("Regular Scan" "Quick Scan" "Intense Scan" "All TCP ports" "Slow & Comprehensive scan" "Top ports" "Specific Ports" "User defined scan" "[--ADVANCED--]" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -96,7 +96,7 @@ do
 	    echo "Scan complete - Check results"
             echo
             echo
-	    ;;
+	        ;;
 	"Slow & Comprehensive scan")
 	    echo 
 	    echo -e "[==>]" "\e[34mThis will perform a 'Slow & Comprehensive' nmap scan with predetermined parameters.\e[0m"
@@ -110,7 +110,7 @@ do
 	    echo "Scan complete - Check results"
             echo
             echo
-	    ;;
+	        ;;
 	"Top ports")
 	    echo 
 	    echo -e "[==>]" "\e[34mThis will perform an nmap scan on 'top ports'with predetermined parameters.\e[0m"
@@ -125,7 +125,7 @@ do
 	    echo "Scan complete - Check results"
             echo
             echo
-	    ;;
+	        ;;
     "Specific Ports")
         echo 
         echo -e "[==>]" "\e[34mThis will perform an nmap scan on 'Specific Ports'with predetermined parameters.\e[0m"
@@ -140,7 +140,155 @@ do
         echo "Scan complete - Check results"
             echo
             echo
-        ;;    
+            ;;    
+    "User defined scan")
+        echo 
+        echo -e "[==>]" "\e[34mUse this option to define your own scan.\e[0m"
+        echo
+        read -p "Enter scan parameters (e.g. -vv -Pn -A -sS -sU -oA -iL --exclude etc.): " cs 
+            read -p "Press enter to continue"
+            echo "Please wait...scan in progress and may take some time....."
+            echo >> "/$(whoami)/reconscan/nmap_customscan.txt"
+            echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_customscan.txt"
+            date >> "/$(whoami)/reconscan/nmap_customscan.txt" 
+        nmap $cs >> "/$(whoami)/reconscan/nmap_customscan.txt"
+        echo "Scan complete - Check results"
+            echo
+            echo
+            ;;        
+    "[--ADVANCED--]")
+        echo 
+        echo
+        echo -e "[==>]" "\e[34mUse this option to perform Firewall evasion & spoofing. Exercise caution while running these scans read the nmap documentation if you are not sure wht you are doing. https://nmap.org/book/man-bypass-firewalls-ids.html\e[0m"
+        PS2='Please enter your choice: '
+options=("Fragment packets" "Use specific MTU" "Use specified interface" "Use a decoy" "Relay TCP connections through a chain of proxies" "Manually specify a source port**" "Spoof MAC Address" "Send bad checksums" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Fragment packets")
+        echo 
+        echo -e "[==>]" "\e[34mSend fragment packets.\e[0m"
+        echo 
+            read -p "Press enter to continue"
+            echo "Please wait...scan in progress and may take some time....."
+            echo >> "/$(whoami)/reconscan/nmap_fragmentscan.txt"
+            echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_fragmentscan.txt"
+            date >> "/$(whoami)/reconscan/nmap_fragmentscan.txt" 
+        nmap -f $tip >> "/$(whoami)/reconscan/nmap_fragmentscan.txt"
+        echo "Scan complete - Check results"
+            echo
+            echo
+            ;;
+        "Use specific MTU")
+        echo 
+        echo -e "[==>]" "\e[34mUse this option to define your own MTU.\e[0m"
+        echo
+        read -p "Enter MTU (MTU can be specified in multiples of 8 (8,16,24,32)): " mtu 
+            read -p "Press enter to continue"
+            echo "Please wait...scan in progress and may take some time....."
+            echo >> "/$(whoami)/reconscan/nmap_mtuscan.txt"
+            echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_mtuscan.txt"
+            date >> "/$(whoami)/reconscan/nmap_mtuscan.txt" 
+        nmap -Pn -sV -A --mtu $mtu $tip >> "/$(whoami)/reconscan/nmap_mtuscan.txt"
+        echo "Scan complete - Check results"
+            echo
+            echo
+            ;;
+        "Use specified interface")
+        echo 
+        echo -e "[==>]" "\e[34mUse this option to define your own interface to send and receive packets.\e[0m"
+        echo
+        read -p "Enter Interface: " int 
+            read -p "Press enter to continue"
+            echo "Please wait...scan in progress and may take some time....."
+            echo >> "/$(whoami)/reconscan/nmap_custinterfacescan.txt"
+            echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_custinterfacescan.txt"
+            date >> "/$(whoami)/reconscan/nmap_custinterfacescan.txt" 
+        nmap -Pn -sV -A -e $int $tip >> "/$(whoami)/reconscan/nmap_custinterfacescan.txt"
+        echo "Scan complete - Check results"
+            echo
+            echo
+            ;;
+        "Use a decoy")
+        echo 
+        echo -e "[==>]" "\e[34mUse this option to confuse firewall with decoys.\e[0m"
+        echo 
+            read -p "Press enter to continue"
+            echo "Please wait...scan in progress and may take some time....."
+            echo >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt"
+            echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt"
+            date >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt" 
+        nmap -Pn -sV -A -D RND:10 $tip >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt"
+        echo "Scan complete - Check results"
+            echo
+            echo
+            ;;
+        "Relay TCP connections through a chain of proxies")
+        echo 
+        echo -e "[==>]" "\e[34mUse this option to Relay TCP connections through a chain of proxy URLs.\e[0m"
+        echo
+        read -p "Enter Comma-separated list of proxy URLs: " pxy 
+            read -p "Press enter to continue"
+            echo "Please wait...scan in progress and may take some time....."
+            echo >> "/$(whoami)/reconscan/nmap_proxyrelayscan.txt"
+            echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_proxyrelayscan.txt"
+            date >> "/$(whoami)/reconscan/nmap_proxyrelayscan.txt" 
+        nmap -Pn -sV -A --proxies $pxy $tip >> "/$(whoami)/reconscan/nmap_proxyrelayscan.txt"
+        echo "Scan complete - Check results"
+            echo
+            echo
+            ;;
+        "Manually specify a source port**")
+        echo 
+        echo -e "[==>]" "\e[34mUse this option to manually specify a source port.\e[0m"
+        echo
+        read -p "Enter source port to be used: " sp
+            read -p "Press enter to continue"
+            echo "Please wait...scan in progress and may take some time....."
+            echo >> "/$(whoami)/reconscan/nmap_sourceportscan.txt"
+            echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_sourceportscan.txt"
+            date >> "/$(whoami)/reconscan/nmap_sourceportscan.txt" 
+        nmap -Pn -sV -A -g $sp $tip >> "/$(whoami)/reconscan/nmap_sourceportscan.txt"
+        echo "Scan complete - Check results"
+            echo
+            echo
+            ;;
+        "Spoof MAC Address")
+        echo 
+        echo -e "[==>]" "\e[34mUse this option to spoof a mac address.\e[0m"
+        echo
+        read -p "Enter mac address to be used for spoofing: " smac
+            read -p "Press enter to continue"
+            echo "Please wait...scan in progress and may take some time....."
+            echo >> "/$(whoami)/reconscan/nmap_spoofmacscan.txt"
+            echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_spoofmacscan.txt"
+            date >> "/$(whoami)/reconscan/nmap_spoofmacscan.txt" 
+        nmap -Pn -v -sT --spoof-mac $smac $tip >> "/$(whoami)/reconscan/nmap_spoofmacscan.txt"
+        echo "Scan complete - Check results"
+            echo
+            echo
+            ;;
+        "Send bad checksums")
+        echo 
+        echo -e "[==>]" "\e[34mUse this option to send bad checksums while scanning.\e[0m"
+        echo
+            read -p "Press enter to continue"
+            echo "Please wait...scan in progress and may take some time....."
+            echo >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt"
+            echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt"
+            date >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt" 
+        nmap -Pn -v -sT --badsum $tip >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt"
+        echo "Scan complete - Check results"
+            echo
+            echo
+            ;;
+        "Quit")
+            break
+            ;;
+        *) echo invalid option;;
+    esac
+done    
+            ;;          
         "Quit")
             break
             ;;
