@@ -48,6 +48,49 @@ sleep 2
 f_main
 }
 
+f_dependencies(){
+echo
+echo -e "${Yellow}Checking for dependencies.....${Reset}"
+sleep 2
+if which nmap >/dev/null; then
+	echo -e "nmap is installed.....${Green}[Yes]${Reset}"
+
+else
+sleep 1
+	echo -e "nmap is installed.....${Red}[No]${Reset}"
+sleep 1
+	read -p "Do you want to install nmap?: Yes / No" opt
+if $opt=Yes; then
+	echo -e "${Blue}Installing nmap${Reset}"
+	apt-get update && apt-get install nmap
+else
+	echo -e "${Red}I need nmap to work. nmap is not installed....exitting${Reset}"
+fi
+f_exit
+fi
+
+}
+
+f_exit(){
+clear
+f_banner
+echo
+echo -e "${Yellow}Cleaning up before exiting.....${Reset}"
+echo
+echo -e "All processes terminated ---------- ${Green}[ok]${Reset}"
+sleep 1
+echo -e "All temporary files cleaned up ----${Green}[ok]${Reset}"
+sleep 1
+echo -e "Network Packet dump stopped--------${Green}[ok]${Reset}"
+sleep 1
+echo -e "All wrappers terminated------------${Green}[ok]${Reset}"
+sleep 1
+echo -e "${Bold}BYE BYE${Reset}"
+sleep 4
+clear
+exit
+}
+
 f_nmapregscan(){	# For nmap REGULAR scan
 echo
 echo -e "[==>]" "\e[34mThis will perform a 'regular' nmap scan with predetermined parameters.\e[0m"
@@ -177,7 +220,7 @@ f_banner
 echo
 echo -e "${Red}ADVANCED SCAN OPTIONS${Reset}"
 echo
-echo -e "[*]" "\e[34mUse this option to perform Firewall evasion & spoofing. Exercise caution while running these scans read the nmap documentation if you are not sure wht you are doing. https://nmap.org/book/man-bypass-firewalls-ids.html\e[0m"
+echo -e "[*]" "\e[34mUse this option to perform Firewall evasion & spoofing. Exercise caution while running these scans. Read the nmap documentation if you are not sure what you are doing: https://nmap.org/book/man-bypass-firewalls-ids.html\e[0m"
 echo
 echo "1.  FRAGMENT PACKETS"
 echo "2.  USE SPECIFIC MTU"
@@ -188,6 +231,7 @@ echo "6.  MANUALLY SPECIFY A SOURCE PORT"
 echo "7.  SPOOF MAC ADDRESS"
 echo "8.  SEND BAD CHECKSUMS"
 echo "9.  BACK TO MAIN MENU"
+echo "10. EXIT"
 echo -n "choice: "
 read choice
 
@@ -201,6 +245,7 @@ case $choice in
 	7) f_macspoof;;
 	8) f_badchksum;;
 	9) f_main;;
+	10) f_exit;;
 	*) f_error;;
 esac
 }
@@ -335,7 +380,8 @@ echo
 f_main(){
 clear
 f_banner
-
+echo
+f_dependencies
 # create a directory to store the results
 mkdir -p /$(whoami)/reconscan
 touch /$(whoami)/reconscan/target_list.txt
@@ -358,7 +404,8 @@ fi
 echo
 echo
 
-echo -e "${Blue}SELECT SCAN${Reset}"
+echo -e "${Blue}SELECT SCAN:${Reset}"
+echo
 echo "1.  REGULAR SCAN"
 echo "2.  QUICK SCAN"
 echo "3.  INTENSE SCAN"
@@ -367,7 +414,7 @@ echo "5.  SLOW & COMPREHENSIVE SCAN"
 echo "6.  TOP PORTS"
 echo "7.  SPECIFIC PORTS"
 echo "8.  USER DEFINED SCAN"
-echo "9.  ADVANCED"
+echo -e "9.  ${Red}${Bold}ADVANCED${Reset}"
 echo "10. EXIT"
 echo
 echo -n "Choice: "
@@ -383,7 +430,7 @@ case $choice in
 	7) f_specificportsscan;;
 	8) f_userdefinedscan;;
 	9) f_advanced;;
-	10) clear && exit;;
+	10) f_exit;;
 	*) f_error;;
 esac
 }
