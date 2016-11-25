@@ -1,7 +1,7 @@
 #!/bin/bash
 # clearing the screen before execution
 clear
-echo
+#echo
 ## Formatting Variables
 Red="\033[01;31m"	# For Issues / Errors
 Green="\033[01;32m"	# Success / Asking user input
@@ -13,13 +13,29 @@ Reset="\033[00m"	# Return to Normal
 long='=================================================================================='
 medium='========================================================'
 short='==================================='
+min=1
+max=65535
+now=$(date +"%d_%m_%Y_%T")
 
 ## Function Variables
 
-echo
-echo -e  "${Blue}$(date)${Reset}"	# Show current date and time
+#echo
+#echo -e  "${Blue}$(date)${Reset}"	# Show current date and time
 
 #######################################################################################
+f_userinput(){
+# Collect user input
+read -p "Enter an IP / hostname to scan : " tip
+echo
+echo
+if [ -z $tip ]; then
+echo
+echo
+f_error
+else
+echo -e "[+]" "Using" "\e[1;36;4m"$tip"\e[0m" "as target For RECON SCAN"
+fi
+}
 
 f_banner(){	# For the tool Banner
 echo
@@ -49,11 +65,47 @@ f_main
 }
 
 f_dependencies(){
-echo
-echo -e "${Yellow}Checking for dependencies.....${Reset}"
-sleep 2
+#echo
+echo -e "${Yellow}Checking for dependencies > 10%${Reset}"
+#sleep 1
+clear
+f_banner
+echo -e "${Yellow}Checking for dependencies _ 20%${Reset}"
+sleep 1
+clear
+f_banner
+echo -e "${Yellow}Checking for dependencies > 30%${Reset}"
+#sleep 1
+clear
+f_banner
+echo -e "${Yellow}Checking for dependencies _ 40%${Reset}"
+#sleep 1
+clear
+f_banner
+echo -e "${Yellow}Checking for dependencies > 50%${Reset}"
+sleep 1
+clear
+f_banner
+echo -e "${Yellow}Checking for dependencies _ 60%${Reset}"
+#sleep 1
+clear
+f_banner
+echo -e "${Yellow}Checking for dependencies > 70%${Reset}"
+#sleep 1
+clear
+f_banner
+echo -e "${Yellow}Checking for dependencies _ 80%${Reset}"
+#sleep 1
+clear
+f_banner
+echo -e "${Yellow}Checking for dependencies > 90%${Reset}"
+sleep 1
+clear
+f_banner
+echo -e "${Yellow}Checking for dependencies : 100%${Reset}"
+sleep 1
 if which nmap >/dev/null; then
-	echo -e "nmap is installed.....${Green}[Yes]${Reset}"
+	echo -e "Dependencies are installed.....${Green}[Yes]${Reset}"
 
 else
 sleep 1
@@ -74,16 +126,18 @@ fi
 f_exit(){
 clear
 f_banner
+cd /$(whoami)/reconscan
+zip -r reconscan_$now.zip *.txt && rm *.txt
 echo
 echo -e "${Yellow}Cleaning up before exiting.....${Reset}"
 echo
 echo -e "All processes terminated ---------- ${Green}[ok]${Reset}"
 sleep 1
-echo -e "All temporary files cleaned up ----${Green}[ok]${Reset}"
+echo -e "All temporary files cleaned up -----${Green}[ok]${Reset}"
 sleep 1
-echo -e "Network Packet dump stopped--------${Green}[ok]${Reset}"
+echo -e "Network Packet dump stopped---------${Green}[ok]${Reset}"
 sleep 1
-echo -e "All wrappers terminated------------${Green}[ok]${Reset}"
+echo -e "All wrappers terminated-------------${Green}[ok]${Reset}"
 sleep 1
 echo -e "${Bold}BYE BYE${Reset}"
 sleep 4
@@ -92,6 +146,7 @@ exit
 }
 
 f_nmapregscan(){	# For nmap REGULAR scan
+f_userinput
 echo
 echo -e "[==>]" "\e[34mThis will perform a 'regular' nmap scan with predetermined parameters.\e[0m"
 echo
@@ -102,11 +157,13 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_regularscan.txt" 
 nmap -Pn $tip >> "/$(whoami)/reconscan/nmap_regularscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
 
 f_nmapquickscan(){	# For nmap QUICK scan
+f_userinput
 echo
 echo -e "[==>]" "\e[34mThis will perform a 'quick' nmap scan with predetermined parameters.\e[0m"
 echo
@@ -117,11 +174,13 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_quickscan.txt" 
 nmap -Pn -T4 -F $tip >> "/$(whoami)/reconscan/nmap_quickscan.txt" 
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
 
 f_nmapintensescan(){	# For nmap INTENSE scan
+f_userinput
 echo
 echo -e "[==>]" "\e[34mThis will perform an 'intense' nmap scan with predetermined parameters.\e[0m"
 echo
@@ -132,11 +191,13 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_intensescan.txt" 
 nmap -Pn -T4 -v -A $tip >> "/$(whoami)/reconscan/nmap_intensescan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
 
 f_nmapalltcpportsscan(){	# For nmap All TCP Ports scan
+f_userinput
 echo
 echo -e "[==>]" "\e[34mThis will perform an nmap scan on 'all TCP ports' with predetermined parameters.\e[0m"
 echo
@@ -147,11 +208,13 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_allTCPportsscan.txt" 
 nmap -Pn -p- -v -A -T4 $tip >> "/$(whoami)/reconscan/nmap_allTCPportsscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
 
 f_nmapslowcomprehensivescan(){	# For nmap Slow & Comprehensive scan
+f_userinput
 echo
 echo -e "[==>]" "\e[34mThis will perform a 'Slow & Comprehensive' nmap scan with predetermined parameters.\e[0m"
 echo
@@ -162,15 +225,29 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_comprehensivescan.txt" 
 nmap -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)" $tip >> "/$(whoami)/reconscan/nmap_comprehensivescan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
 
 f_topportsscan(){	# For nmap TOP PORTS scan
+f_userinput
 echo
 echo -e "[==>]" "\e[34mThis will perform an nmap scan on 'top ports'with predetermined parameters.\e[0m"
 echo
 read -p "Enter top ports to scan (e.g. 50): " tp
+# Check for no input
+if [ -z $tp ]; then
+	echo "No input provided"
+fi
+	if [[ "$tp" -gt "$max" ]]; then
+		f_error
+	else
+		if [[ "$tp" -lt "$min" ]]; then
+			f_error
+		fi
+	fi
+
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
 echo >> "/$(whoami)/reconscan/nmap_topportsscan.txt"
@@ -178,15 +255,37 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_topportsscan.txt" 
 nmap -Pn -T4 -v -A $tip --top-ports $tp >> "/$(whoami)/reconscan/nmap_topportsscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
 
 f_specificportsscan(){	# For nmap SPECIFIC PORTS scan
+f_userinput
 echo
 echo -e "[==>]" "\e[34mThis will perform an nmap scan on 'Specific Ports'with predetermined parameters.\e[0m"
-echo
-read -p "Enter ports to scan (e.g. 80,443,21,8080): " sp
+echo "Enter ports to scan (e.g. 80,443,21,8080) [1-65535]: "
+read sp
+min=1
+max=65535
+# Check for No Answer
+if [ -z $sp ]; then
+	f_error
+	#f_specificportsscan
+else
+
+# Check for Wrong answer
+
+if [ "$sp" -gt "$max" ]; then
+	f_error
+	#f_specificportsscan
+else
+if [ "$sp" -lt "$min" ]; then
+	f_error
+	#f_specificportsscan
+fi
+fi
+fi
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
 echo >> "/$(whoami)/reconscan/nmap_spportsscan.txt"
@@ -194,11 +293,13 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_spportsscan.txt" 
 nmap -Pn -T4 -v -p $sp -A $tip >> "/$(whoami)/reconscan/nmap_spportsscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
 
 f_userdefinedscan(){	# For USER DEFINED nmap scan
+f_userinput
 echo
 echo -e "[==>]" "\e[34mUse this option to define your own scan.\e[0m"
 echo
@@ -208,8 +309,9 @@ echo "Please wait...scan in progress and may take some time....."
 echo >> "/$(whoami)/reconscan/nmap_customscan.txt"
 echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_customscan.txt"
 date >> "/$(whoami)/reconscan/nmap_customscan.txt" 
-nmap $cs >> "/$(whoami)/reconscan/nmap_customscan.txt"
+nmap $cs $tip >> "/$(whoami)/reconscan/nmap_customscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
@@ -254,6 +356,7 @@ f_fragmentpkts(){
 echo
 echo -e "[==>]" "\e[34mSend fragment packets.\e[0m"
 echo 
+f_userinput
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
 echo >> "/$(whoami)/reconscan/nmap_fragmentscan.txt"
@@ -261,14 +364,17 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_fragmentscan.txt" 
 nmap -f $tip >> "/$(whoami)/reconscan/nmap_fragmentscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
 
 f_spmtu(){
+
 echo
 echo -e "[==>]" "\e[34mUse this option to define your own MTU.\e[0m"
 echo
+f_userinput
 read -p "Enter MTU (MTU can be specified in multiples of 8 (8,16,24,32)): " mtu 
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
@@ -277,6 +383,7 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_mtuscan.txt" 
 nmap -Pn -sV -A --mtu $mtu $tip >> "/$(whoami)/reconscan/nmap_mtuscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
@@ -285,6 +392,7 @@ f_spintface(){
 echo
 echo -e "[==>]" "\e[34mUse this option to define your own interface to send and receive packets.\e[0m"
 echo
+f_userinput
 read -p "Enter Interface: " int 
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
@@ -293,6 +401,7 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_custinterfacescan.txt" 
 nmap -Pn -sV -A -e $int $tip >> "/$(whoami)/reconscan/nmap_custinterfacescan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
@@ -301,6 +410,7 @@ f_decoy(){
 echo
 echo -e "[==>]" "\e[34mUse this option to confuse firewall with decoys.\e[0m"
 echo 
+f_userinput
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
 echo >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt"
@@ -308,6 +418,7 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt" 
 nmap -Pn -sV -A -D RND:10 $tip >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
@@ -316,6 +427,7 @@ f_pxychainrelay(){
 echo
 echo -e "[==>]" "\e[34mUse this option to Relay TCP connections through a chain of proxy URLs.\e[0m"
 echo
+f_userinput
 read -p "Enter Comma-separated list of proxy URLs: " pxy 
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
@@ -324,6 +436,7 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_proxyrelayscan.txt" 
 nmap -Pn -sV -A --proxies $pxy $tip >> "/$(whoami)/reconscan/nmap_proxyrelayscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
@@ -332,6 +445,7 @@ f_srcport(){
 echo
 echo -e "[==>]" "\e[34mUse this option to manually specify a source port.\e[0m"
 echo
+f_userinput
 read -p "Enter source port to be used: " sp
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
@@ -340,6 +454,7 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_sourceportscan.txt" 
 nmap -Pn -sV -A -g $sp $tip >> "/$(whoami)/reconscan/nmap_sourceportscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
@@ -348,6 +463,7 @@ f_macspoof(){
 echo
 echo -e "[==>]" "\e[34mUse this option to spoof a mac address.\e[0m"
 echo
+f_userinput
 read -p "Enter mac address to be used for spoofing: " smac
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
@@ -356,6 +472,7 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_spoofmacscan.txt" 
 nmap -Pn -v -sT --spoof-mac $smac $tip >> "/$(whoami)/reconscan/nmap_spoofmacscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
@@ -364,6 +481,7 @@ f_badchksum(){
 echo
 echo -e "[==>]" "\e[34mUse this option to send bad checksums while scanning.\e[0m"
 echo
+f_userinput
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
 echo >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt"
@@ -371,39 +489,32 @@ echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nma
 date >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt" 
 nmap -Pn -v -sT --badsum $tip >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt"
 echo "Scan complete - Check results"
+sleep 2
 echo
 echo
 }
 
 ######################################################################################
-
+f_banner
+f_dependencies
+sleep 2
 f_main(){
 clear
+echo -e  "${Blue}$(date)${Reset}"  # Show current date and time
 f_banner
-echo
-f_dependencies
+#echo
+#f_dependencies
 # create a directory to store the results
 mkdir -p /$(whoami)/reconscan
 touch /$(whoami)/reconscan/target_list.txt
-# Collect user input
-read -p "Enter an IP / hostname to scan : " tip
-echo
-echo
-if [ -z $tip ]; then
-echo
-echo
-f_error
-else
-echo -e "[+]" Using "\e[1;36;4m"$tip"\e[0m" as target For RECON SCAN
+
 echo >> "/$(whoami)/reconscan/target_list.txt"
 echo "[+]" "[---------------------New Scan------------------]" >> "/$(whoami)/reconscan/target_list.txt"
 date >> "/$(whoami)/reconscan/target_list.txt"
 echo "The selected target: " $tip >> "/$(whoami)/reconscan/target_list.txt"
 echo
-fi
 echo
 echo
-
 echo -e "${Blue}SELECT SCAN:${Reset}"
 echo
 echo "1.  REGULAR SCAN"
