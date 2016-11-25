@@ -126,10 +126,12 @@ fi
 f_exit(){
 clear
 f_banner
-cd /$(whoami)/reconscan
-zip -r reconscan_$now.zip *.txt && rm *.txt
 echo
+cd /$(whoami)/reconscan
+zip -r -uq reconscan_$now.zip $now && rm -r $now
+cd /$(whoami)
 echo -e "${Yellow}Cleaning up before exiting.....${Reset}"
+echo -e "${Cyan}Results will be stored in a zipped file @ /$(whoami)/reconscan${Reset}"
 echo
 echo -e "All processes terminated ---------- ${Green}[ok]${Reset}"
 sleep 1
@@ -145,6 +147,7 @@ clear
 exit
 }
 
+
 f_nmapregscan(){	# For nmap REGULAR scan
 f_userinput
 echo
@@ -152,10 +155,10 @@ echo -e "[==>]" "\e[34mThis will perform a 'regular' nmap scan with predetermine
 echo
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time"
-echo >> "/$(whoami)/reconscan/nmap_regularscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_regularscan.txt"
-date >> "/$(whoami)/reconscan/nmap_regularscan.txt" 
-nmap -Pn $tip >> "/$(whoami)/reconscan/nmap_regularscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_regularscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_regularscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_regularscan.txt" 
+nmap -Pn $tip >> "/$(whoami)/reconscan/$now/nmap_regularscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -169,10 +172,10 @@ echo -e "[==>]" "\e[34mThis will perform a 'quick' nmap scan with predetermined 
 echo
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time...should be quick though :)"
-echo >> "/$(whoami)/reconscan/nmap_quickscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_quickscan.txt"
-date >> "/$(whoami)/reconscan/nmap_quickscan.txt" 
-nmap -Pn -T4 -F $tip >> "/$(whoami)/reconscan/nmap_quickscan.txt" 
+echo >> "/$(whoami)/reconscan/$now/nmap_quickscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_quickscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_quickscan.txt" 
+nmap -Pn -T4 -F $tip >> "/$(whoami)/reconscan/$now/nmap_quickscan.txt" 
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -186,10 +189,10 @@ echo -e "[==>]" "\e[34mThis will perform an 'intense' nmap scan with predetermin
 echo
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_intensescan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_intensescan.txt"
-date >> "/$(whoami)/reconscan/nmap_intensescan.txt" 
-nmap -Pn -T4 -v -A $tip >> "/$(whoami)/reconscan/nmap_intensescan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_intensescan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_intensescan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_intensescan.txt" 
+nmap -Pn -T4 -v -A $tip >> "/$(whoami)/reconscan/$now/nmap_intensescan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -203,10 +206,10 @@ echo -e "[==>]" "\e[34mThis will perform an nmap scan on 'all TCP ports' with pr
 echo
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_allTCPportsscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_allTCPportsscan.txt"
-date >> "/$(whoami)/reconscan/nmap_allTCPportsscan.txt" 
-nmap -Pn -p- -v -A -T4 $tip >> "/$(whoami)/reconscan/nmap_allTCPportsscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_allTCPportsscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_allTCPportsscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_allTCPportsscan.txt" 
+nmap -Pn -p- -v -A -T4 $tip >> "/$(whoami)/reconscan/$now/nmap_allTCPportsscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -220,10 +223,10 @@ echo -e "[==>]" "\e[34mThis will perform a 'Slow & Comprehensive' nmap scan with
 echo
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_comprehensivescan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_comprehensivescan.txt"
-date >> "/$(whoami)/reconscan/nmap_comprehensivescan.txt" 
-nmap -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)" $tip >> "/$(whoami)/reconscan/nmap_comprehensivescan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_comprehensivescan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_comprehensivescan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_comprehensivescan.txt" 
+nmap -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)" $tip >> "/$(whoami)/reconscan/$now/nmap_comprehensivescan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -250,10 +253,10 @@ fi
 
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_topportsscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_topportsscan.txt"
-date >> "/$(whoami)/reconscan/nmap_topportsscan.txt" 
-nmap -Pn -T4 -v -A $tip --top-ports $tp >> "/$(whoami)/reconscan/nmap_topportsscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_topportsscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_topportsscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_topportsscan.txt" 
+nmap -Pn -T4 -v -A $tip --top-ports $tp >> "/$(whoami)/reconscan/$now/nmap_topportsscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -288,10 +291,10 @@ fi
 fi
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_spportsscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_spportsscan.txt"
-date >> "/$(whoami)/reconscan/nmap_spportsscan.txt" 
-nmap -Pn -T4 -v -p $sp -A $tip >> "/$(whoami)/reconscan/nmap_spportsscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_spportsscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_spportsscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_spportsscan.txt" 
+nmap -Pn -T4 -v -p $sp -A $tip >> "/$(whoami)/reconscan/$now/nmap_spportsscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -306,10 +309,10 @@ echo
 read -p "Enter scan parameters (e.g. -vv -Pn -A -sS -sU -oA -iL --exclude etc.): " cs 
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_customscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_customscan.txt"
-date >> "/$(whoami)/reconscan/nmap_customscan.txt" 
-nmap $cs $tip >> "/$(whoami)/reconscan/nmap_customscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_customscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_customscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_customscan.txt" 
+nmap $cs $tip >> "/$(whoami)/reconscan/$now/nmap_customscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -359,10 +362,10 @@ echo
 f_userinput
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_fragmentscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_fragmentscan.txt"
-date >> "/$(whoami)/reconscan/nmap_fragmentscan.txt" 
-nmap -f $tip >> "/$(whoami)/reconscan/nmap_fragmentscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_fragmentscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_fragmentscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_fragmentscan.txt" 
+nmap -f $tip >> "/$(whoami)/reconscan/$now/nmap_fragmentscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -378,10 +381,10 @@ f_userinput
 read -p "Enter MTU (MTU can be specified in multiples of 8 (8,16,24,32)): " mtu 
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_mtuscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_mtuscan.txt"
-date >> "/$(whoami)/reconscan/nmap_mtuscan.txt" 
-nmap -Pn -sV -A --mtu $mtu $tip >> "/$(whoami)/reconscan/nmap_mtuscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_mtuscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_mtuscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_mtuscan.txt" 
+nmap -Pn -sV -A --mtu $mtu $tip >> "/$(whoami)/reconscan/$now/nmap_mtuscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -396,10 +399,10 @@ f_userinput
 read -p "Enter Interface: " int 
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_custinterfacescan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_custinterfacescan.txt"
-date >> "/$(whoami)/reconscan/nmap_custinterfacescan.txt" 
-nmap -Pn -sV -A -e $int $tip >> "/$(whoami)/reconscan/nmap_custinterfacescan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_custinterfacescan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_custinterfacescan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_custinterfacescan.txt" 
+nmap -Pn -sV -A -e $int $tip >> "/$(whoami)/reconscan/$now/nmap_custinterfacescan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -413,10 +416,10 @@ echo
 f_userinput
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt"
-date >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt" 
-nmap -Pn -sV -A -D RND:10 $tip >> "/$(whoami)/reconscan/nmap_RNDDecoyscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_RNDDecoyscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_RNDDecoyscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_RNDDecoyscan.txt" 
+nmap -Pn -sV -A -D RND:10 $tip >> "/$(whoami)/reconscan/$now/nmap_RNDDecoyscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -431,10 +434,10 @@ f_userinput
 read -p "Enter Comma-separated list of proxy URLs: " pxy 
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_proxyrelayscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_proxyrelayscan.txt"
-date >> "/$(whoami)/reconscan/nmap_proxyrelayscan.txt" 
-nmap -Pn -sV -A --proxies $pxy $tip >> "/$(whoami)/reconscan/nmap_proxyrelayscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_proxyrelayscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_proxyrelayscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_proxyrelayscan.txt" 
+nmap -Pn -sV -A --proxies $pxy $tip >> "/$(whoami)/reconscan/$now/nmap_proxyrelayscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -449,10 +452,10 @@ f_userinput
 read -p "Enter source port to be used: " sp
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_sourceportscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_sourceportscan.txt"
-date >> "/$(whoami)/reconscan/nmap_sourceportscan.txt" 
-nmap -Pn -sV -A -g $sp $tip >> "/$(whoami)/reconscan/nmap_sourceportscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_sourceportscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_sourceportscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_sourceportscan.txt" 
+nmap -Pn -sV -A -g $sp $tip >> "/$(whoami)/reconscan/$now/nmap_sourceportscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -467,10 +470,10 @@ f_userinput
 read -p "Enter mac address to be used for spoofing: " smac
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_spoofmacscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_spoofmacscan.txt"
-date >> "/$(whoami)/reconscan/nmap_spoofmacscan.txt" 
-nmap -Pn -v -sT --spoof-mac $smac $tip >> "/$(whoami)/reconscan/nmap_spoofmacscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_spoofmacscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_spoofmacscan.txt"
+date >> "/$(whoami)/reconscan/$now/nmap_spoofmacscan.txt" 
+nmap -Pn -v -sT --spoof-mac $smac $tip >> "/$(whoami)/reconscan/$now/nmap_spoofmacscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -484,10 +487,10 @@ echo
 f_userinput
 read -p "Press enter to continue"
 echo "Please wait...scan in progress and may take some time....."
-echo >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt"
-echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt"
+echo >> "/$(whoami)/reconscan/$now/nmap_badchecksumscan.txt"
+echo "[+]" "[------------Scan Results------------]" >> "/$(whoami)/reconscan/$now/nmap_badchecksumscan.txt"
 date >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt" 
-nmap -Pn -v -sT --badsum $tip >> "/$(whoami)/reconscan/nmap_badchecksumscan.txt"
+nmap -Pn -v -sT --badsum $tip >> "/$(whoami)/reconscan/$now/nmap_badchecksumscan.txt"
 echo "Scan complete - Check results"
 sleep 2
 echo
@@ -505,13 +508,13 @@ f_banner
 #echo
 #f_dependencies
 # create a directory to store the results
-mkdir -p /$(whoami)/reconscan
-touch /$(whoami)/reconscan/target_list.txt
+mkdir -p /$(whoami)/reconscan/$now
+touch /$(whoami)/reconscan/$now/target_list.txt
 
-echo >> "/$(whoami)/reconscan/target_list.txt"
-echo "[+]" "[---------------------New Scan------------------]" >> "/$(whoami)/reconscan/target_list.txt"
-date >> "/$(whoami)/reconscan/target_list.txt"
-echo "The selected target: " $tip >> "/$(whoami)/reconscan/target_list.txt"
+echo >> "/$(whoami)/reconscan/$now/target_list.txt"
+echo "[+]" "[---------------------New Scan------------------]" >> "/$(whoami)/reconscan/$now/target_list.txt"
+date >> "/$(whoami)/reconscan/$now/target_list.txt"
+echo "The selected target: " $tip >> "/$(whoami)/reconscan/$now/target_list.txt"
 echo
 echo
 echo
